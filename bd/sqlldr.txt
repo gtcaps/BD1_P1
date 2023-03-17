@@ -1,0 +1,1 @@
+sqlldr userid=system/1q2w3e4r5t control=data.ctl
