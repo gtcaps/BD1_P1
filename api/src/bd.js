@@ -1,4 +1,5 @@
 const oracledb = require('oracledb');
+oracledb.autoCommit = true;
 
 const connectionString = {
     user:               'system',
@@ -14,9 +15,11 @@ const executeQuery = async (query) => {
 
         // Execute Query
         result = await connection.execute(query);
+        console.log(result);
 
     } catch (err) {
         console.log(err.message);
+        result = {rows: {length: 0}};
     } finally {
         if (connection) {
             try {
@@ -28,10 +31,18 @@ const executeQuery = async (query) => {
         }
     }
 
+
+    // Rows Affected
+    
+    if (result.rowsAffected != undefined) {
+        return result.rowsAffected;
+    }
+
     // Validate Query Rows
     if (result.rows.length == 0) {
         return "data not found";
     } 
+    
 
     return result.rows;
     
