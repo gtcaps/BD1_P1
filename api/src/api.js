@@ -29,11 +29,55 @@ app.get('/eliminarTemporal', async (req, res) => {
 });
 
 app.get('/cargarTemporal', async (req, res) => {
-    await db.executeQuery(querys.creatTmp);
+    await db.executeQuery(querys.createTmp);
     cargaMasiva.cargar();
 
     res.json({
         mensaje: 'Datos cargados a la tabla temporal'
+    });
+});
+
+app.get('/eliminarModelo', async (req, res) => {
+    await db.executeQuery(querys.dropModelAplicacionTratamiento);
+    await db.executeQuery(querys.dropModelRegistroHospital);
+    await db.executeQuery(querys.dropModelConocidoVictima);
+    await db.executeQuery(querys.dropModelUbicacionVictima);
+    await db.executeQuery(querys.dropModelConocido);
+    await db.executeQuery(querys.dropModelUbicacion);
+    await db.executeQuery(querys.dropModelTratamiento);
+    await db.executeQuery(querys.dropModelHospital);
+    await db.executeQuery(querys.dropModelVictima);
+    
+    res.json({
+        mensaje: 'Tablas de Datos del Modelo Eliminadas'
+    });
+});
+
+app.get('/cargarModelo', async (req, res) => {
+    // CREAR TABLAS DEL MODELO
+    await db.executeQuery(querys.createModelVictima);
+    await db.executeQuery(querys.createModelHospital);
+    await db.executeQuery(querys.createModelTratamiento);
+    await db.executeQuery(querys.createModelUbicacion);
+    await db.executeQuery(querys.createModelConocido);
+    await db.executeQuery(querys.createModelUbicacionVictima);
+    await db.executeQuery(querys.createModelConocidoVictima);
+    await db.executeQuery(querys.createModelRegistroHospital);
+    await db.executeQuery(querys.createModelAplicacionTratamiento);
+
+    // LLENAR TABLAS DEL MODELO
+    await db.executeQuery(querys.fillModelVictima);
+    await db.executeQuery(querys.fillModelHospital);
+    await db.executeQuery(querys.fillModelTratamiento);
+    await db.executeQuery(querys.fillModelUbicacion);
+    await db.executeQuery(querys.fillModelConocido);
+    await db.executeQuery(querys.fillModelUbicacionVictima);
+    await db.executeQuery(querys.fillModelRegistroHospital);
+    await db.executeQuery(querys.fillModelConocidoVictima);
+    await db.executeQuery(querys.fillModelAplicacionTratamiento);
+    
+    res.json({
+        mensaje: 'Tablas de Datos del Modelo Creada y Llenada'
     });
 });
 
