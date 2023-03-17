@@ -1,6 +1,4 @@
 module.exports =  {
-    getAllVictimas : `SELECT * FROM VICTIMA WHERE ROWNUM <= 10`,
-
     deleteTmp : `DROP TABLE TMP_MSC_DATA`,
 
     createTmp: `
@@ -244,6 +242,88 @@ module.exports =  {
     dropModelUbicacion: `DROP TABLE UBICACION`,
     dropModelTratamiento: `DROP TABLE TRATAMIENTO`,
     dropModelHospital: `DROP TABLE HOSPITAL`,
-    dropModelVictima: `DROP TABLE VICTIMA`
+    dropModelVictima: `DROP TABLE VICTIMA`,
+
+    query1: `
+    SELECT hospital, direccion, fallecidos
+    FROM (
+        SELECT h.nombre AS Hospital, h.direccion AS Direccion, COUNT(v.fecha_muerte) AS Fallecidos
+        FROM victima v
+        INNER JOIN registroHospital r ON v.id = r.victima
+        INNER JOIN hospital h ON r.HOSPITAL = h.ID
+        GROUP BY h.nombre, h.direccion
+    )
+    ORDER BY fallecidos DESC, hospital ASC
+    `,
+
+    query2: `
+    SELECT  v.nombre , v.apellido, a.efectividad
+    FROM victima v
+    INNER JOIN registroHospital r ON v.id = r.victima
+    INNER JOIN aplicacionTratamiento a ON r.id = a.registro
+    INNER JOIN tratamiento t ON t.id = a.tratamiento
+    WHERE v.estado = 'En cuarentena'
+    AND t.descripcion = 'Transfusiones de sangre'
+    AND a.efectividad > 5
+    ORDER BY a.efectividad DESC, v.nombre ASC, v.apellido ASC
+    `,
+
+    query3: `
+    SELECT v.nombre AS nombre,v.apellido as apellido, direccion as direccion, a.personas as personas
+    FROM victima v
+    INNER JOIN (
+        SELECT c.victima AS v, COUNT(c.conocido) as personas
+        FROM conocidoVictima c
+        GROUP BY c.victima
+        HAVING COUNT(c.conocido) > 3
+    ) a ON v.id = a.v
+    WHERE v.fecha_muerte IS NOT NULL
+    ORDER BY a.personas DESC, v.nombre ASC
+    `,
+
+    query4: `
+    SELECT v.nombre as nombre, v.apellido as apellido, a.asociados as asociados
+    FROM victima v
+    INNER JOIN conocidoVictima c ON v.id = c.victima
+    INNER JOIN (
+        SELECT c.victima AS v, COUNT(c.conocido) as asociados
+        FROM ConocidoVictima c
+        GROUP BY c.victima
+        HAVING COUNT(c.conocido)>2
+    ) a ON v.id = a.v
+    WHERE v.estado = 'Suspendida'
+    AND c.contacto = 'Beso'
+    ORDER BY a.asociados DESC, v.nombre ASC
+    `,
+
+    query5: `
+    SELECT nombre, apellido, cantidadTratamientos
+    FROM (
+        SELECT v.nombre as nombre,v.apellido as apellido, COUNT(a.fecha_inicio_tratamiento) as cantidadTratamientos
+        FROM victima v
+        INNER JOIN registroHospital r ON r.victima = v.id
+        INNER JOIN aplicacionTratamiento a ON a.registro = r.id
+        INNER JOIN tratamiento t ON t.id = a.tratamiento
+        WHERE t.descripcion = 'Oxigeno'
+        GROUP BY v.nombre, v.apellido
+        ORDER BY COUNT(a.fecha_inicio_tratamiento) DESC, v.nombre ASC, v.apellido ASC
+    )
+    WHERE ROWNUM <= 5
+    `,
+
+    query6: `
+    `,
+
+    query7: `
+    `,
+
+    query8: `
+    `,
+
+    query9: `
+    `,
+
+    query10: `
+    `,
     
 }

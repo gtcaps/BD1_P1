@@ -38,11 +38,6 @@ const executeQuery = async (query) => {
         return result.rowsAffected;
     }
 
-    // Validate Query Rows
-    if (result.rows.length == 0) {
-        return "data not found";
-    } 
-    
 
     return result.rows;
     

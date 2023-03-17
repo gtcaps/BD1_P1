@@ -14,13 +14,6 @@ app.get('/', (req, res) => {
 });
 
 
-app.get('/allVictimas', async (req, res) => {
-    res.json({
-        consulta: 1,
-        data: await db.executeQuery(querys.getAllVictimas)
-    });
-});
-
 app.get('/eliminarTemporal', async (req, res) => {
     await db.executeQuery(querys.deleteTmp);
     res.json({
@@ -78,6 +71,86 @@ app.get('/cargarModelo', async (req, res) => {
     
     res.json({
         mensaje: 'Tablas de Datos del Modelo Creada y Llenada'
+    });
+});
+
+app.get('/consulta1', async (req, res) => {
+    let data = await db.executeQuery(querys.query1);
+    res.json({
+        consulta: 1,
+        filas: data.length,
+        data: data
+    });
+});
+
+app.get('/consulta2', async (req, res) => {
+    let data = await db.executeQuery(querys.query2);
+    res.json({
+        consulta: 2,
+        filas: data.length,
+        data: data
+    });
+});
+
+app.get('/consulta3', async (req, res) => {
+    let data = await db.executeQuery(querys.query3);
+    res.json({
+        consulta: 3,
+        filas: data.length,
+        data: data
+    });
+});
+
+app.get('/consulta4', async (req, res) => {
+    let data = await db.executeQuery(querys.query4);
+    res.json({
+        consulta: 4,
+        filas: data.length,
+        data: data
+    });
+});
+
+app.get('/consulta5', async (req, res) => {
+    let data = await db.executeQuery(querys.query5);
+    res.json({
+        consulta: 5,
+        filas: data.length,
+        data: data
+    });
+});
+
+app.get('/consulta6', async (req, res) => {
+    res.json({
+        consulta: 1,
+        data: await db.executeQuery(querys.query6)
+    });
+});
+
+app.get('/consulta7', async (req, res) => {
+    res.json({
+        consulta: 1,
+        data: await db.executeQuery(querys.query7)
+    });
+});
+
+app.get('/consulta8', async (req, res) => {
+    res.json({
+        consulta: 1,
+        data: await db.executeQuery(querys.query8)
+    });
+});
+
+app.get('/consulta9', async (req, res) => {
+    res.json({
+        consulta: 1,
+        data: await db.executeQuery(querys.query9)
+    });
+});
+
+app.get('/consulta10', async (req, res) => {
+    res.json({
+        consulta: 1,
+        data: await db.executeQuery(querys.query10)
     });
 });
 
