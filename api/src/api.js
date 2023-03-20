@@ -120,37 +120,47 @@ app.get('/consulta5', async (req, res) => {
 });
 
 app.get('/consulta6', async (req, res) => {
+    let data = await db.executeQuery(querys.query6);
     res.json({
-        consulta: 1,
-        data: await db.executeQuery(querys.query6)
+        consulta: 6,
+        filas: data.length,
+        data: data
     });
 });
 
 app.get('/consulta7', async (req, res) => {
+    let data = await db.executeQuery(querys.query7);
     res.json({
-        consulta: 1,
-        data: await db.executeQuery(querys.query7)
+        consulta: 7,
+        filas: data.length,
+        data: data
     });
 });
 
 app.get('/consulta8', async (req, res) => {
+    let data = await db.executeQuery(querys.query8);
     res.json({
-        consulta: 1,
-        data: await db.executeQuery(querys.query8)
+        consulta: 8,
+        filas: data.length,
+        data: data
     });
 });
 
 app.get('/consulta9', async (req, res) => {
+    let data = await db.executeQuery(querys.query9);
     res.json({
-        consulta: 1,
-        data: await db.executeQuery(querys.query9)
+        consulta: 9,
+        filas: data.length,
+        data: data
     });
 });
 
 app.get('/consulta10', async (req, res) => {
+    let data = await db.executeQuery(querys.query10);
     res.json({
-        consulta: 1,
-        data: await db.executeQuery(querys.query10)
+        consulta: 10,
+        filas: data.length,
+        data: data
     });
 });
 

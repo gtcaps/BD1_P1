@@ -312,15 +312,52 @@ module.exports =  {
     `,
 
     query6: `
+    SELECT v.nombre as nombre, v.apellido as apellido, v.fecha_muerte as fecha_muerte
+    FROM victima v
+    INNER JOIN registroHospital r ON r.victima = v.id
+    INNER JOIN aplicacionTratamiento a ON a.registro = r.id
+    INNER JOIN tratamiento t ON t.id = a.tratamiento
+    INNER JOIN ubicacionVictima uv ON uv.victima = v.id
+    INNER JOIN ubicacion u ON u.id = uv.ubicacion
+    WHERE t.descripcion = 'Manejo de la presion arterial'
+    AND u.direccion = '1987 Delphine Well'
+    ORDER BY v.nombre, v.apellido
     `,
 
     query7: `
+    SELECT v.nombre as nombre, v.apellido as apellido, v.direccion as direccion, a.cantidadTratamientos
+    FROM victima v
+    INNER JOIN registroHospital r ON r.victima = v.id
+    INNER JOIN (
+        SELECT v.id as id, COUNT(a.fecha_inicio_tratamiento) as cantidadTratamientos
+        FROM victima v
+        INNER JOIN registroHospital r ON r.victima = v.id
+        INNER JOIN aplicacionTratamiento a ON a.registro = r.id
+        INNER JOIN tratamiento t ON t.id = a.tratamiento
+        GROUP BY v.id
+        HAVING COUNT(a.fecha_inicio_tratamiento) = 2
+    ) a ON v.id = a.id
+    INNER JOIN (
+        SELECT c.victima as id, COUNT(c.conocido) as totalConocidos
+        FROM conocidoVictima c
+        GROUP BY c.victima
+        HAVING COUNT(c.conocido) < 2
+    ) b ON v.id = b.id
+    ORDER BY v.nombre, v.apellido
     `,
 
     query8: `
     `,
 
     query9: `
+    SELECT  round(( victimas / (SELECT COUNT(1) FROM registroHospital ) ) * 100, 2) || '%'  as porcentajeVictimas , hospital
+    FROM (
+        SELECT COUNT(r.victima) as victimas, h.nombre as hospital
+        FROM registroHospital r
+        INNER JOIN hospital h ON h.id = r.hospital
+        GROUP BY h.nombre
+    )
+    ORDER BY victimas DESC
     `,
 
     query10: `
